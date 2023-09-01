@@ -39,6 +39,11 @@ async def contact(message: types.Message, state: FSMContext):
         cursor.execute("CREATE TABLE IF NOT EXISTS `users` (user_id INT PRIMARY KEY, nick TEXT, number INT)")
         cursor.execute(f"INSERT OR IGNORE INTO `users` VALUES ('{message.chat.id}', '{message.from_user.first_name}', '{message.contact.phone_number}')")
         await message.answer('✅ Регистрация прошла успешно!', reply_markup=keyboard.kb_menu)
+        if settings.ID != '':
+            try:
+                await bot.send_message(chat_id=settings.ID, text=f"Новый пользователь\n\nИмя:{message.from_user.first_name}\nID:{message.chat.id}\nНомер:{message.contact.phone_number}\n")
+            except:
+                print(Fore.RED + 'Неверный айди')
         print(Fore.GREEN + "BOT:",f"Новый пользователь\n\nИмя:{message.from_user.first_name}\nID:{message.chat.id}\nНомер:{message.contact.phone_number}\n")
 
 @dp.message_handler(content_types='text')
